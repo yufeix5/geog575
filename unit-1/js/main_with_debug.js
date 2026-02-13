@@ -1,6 +1,7 @@
 //initialize function called when the script loads
 function initialize(){
 	cities();
+	debugAjax();
 };
 
 //function to create a table with cities and their populations
@@ -26,7 +27,7 @@ function cities(){
 	];
 
 	//append the table element to the div
-	$("#mydiv").append("<table>");
+	$("#mydiv").append("<table></table>");
 
 	//append a header row to the table
 	$("table").append("<tr>");
@@ -93,6 +94,35 @@ function addEvents(){
 
 	document.querySelector("table").addEventListener("click", clickme)
 };
+
+// activity #4 
+//function to handle the GeoJSON data once it is loaded
+function debugCallback(myData){
+	//append the data to the div for display
+	document.querySelector("#mydiv").insertAdjacentHTML(
+		"beforeend",
+		"GeoJSON data: " + JSON.stringify(myData)
+	);
+}
+
+//function to make the AJAX call to retrieve the GeoJSON data
+function debugAjax(){
+	//use fetch to make the AJAX call
+  	fetch("data/MegaCities.geojson")
+		//handle the response
+		.then(function(response){
+			return response.json();     // parse the response as JSON and return the resulting object
+		})
+		//handle the parsed data
+		.then(function(myData){
+			console.log("This is the data:", myData); // log the parsed data to the console for debugging
+			debugCallback(myData);      // send the parsed data to the callback function for processing
+		})
+		//handle any errors
+		.catch(function(err){
+			console.error("Fetch error:", err);
+		});
+}
 
 // run after DOM is ready
 $(document).ready(initialize);

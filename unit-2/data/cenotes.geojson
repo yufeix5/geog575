@@ -1,0 +1,321 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Siete Bocas",
+                "Description": "Siete Bocas is Spanish for ‘7 Mouths’. Here you can find a karst terrain with 7 round sinkholes, each offering stairs down to the water. A huge sinkhole with a diameter of approx. 70m connects the 7 mouths. The water level here does not reach the cave ceiling, so we can confidently call this a cavern dive.",
+                "Entrance Fee:": "300 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "4/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.04369544597117,
+                    20.877347101162776
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Jardin del Eden",
+                "Description": "Cenote El Jardín de Edén (a.k.a. Ponderosa, the name of the cave system) is an open cenote, complete with convenient diver-only stairs leading you down to a nice platform. The dive starts in the snorkel area of Cenote Edén, full of fish & huge moss covered rocks. Following my cave line that connects to the main cavern line, you’ll glide through a wide tunnel decorated with fossils until we reach Cenote Corral. It is here where you’ll be treated to some of the most beautiful light beams in Quintana Roo. Following the curve of Cenote Corral, you’ll swim through the mystical halocline to then enjoy light beams, mangroves, fossils, and plenty of cool speleothems. Cover your light while in the tunnel swimming towards to exit to enjoy the natural light of Cenote El Jardín de Edén. This is truly a beautiful journey through Xibalbá - the Mayan underworld.",
+                "Entrance Fee:": "500 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Open Water",
+                "Max Depth": "14m/46ft",
+                "Speleothems": "2/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.25881980910954,
+                    20.492855293903506
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Yaakun",
+                "Description": "Yaakun means love in Maya and I know you’re going to love this dive like I do! We walk down a 3-story wooden staircase to reach the large platform where you can use the steps or stride jump in to get in the water. There is a really cool/eerie thick blanket of hydrogen sulfide cloud that starts at about 85ft/25m. Visibility is crystal clear under the cloud and you are likely to see blind cavefish and cenote shrimp. Catfish also call this cenote home and are found everywhere. Glide by massive stalactites along the cavern wall. ",
+                "Entrance Fee:": "250 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "4/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.1845919094924,
+                    20.63461482793696
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Dreamgate",
+                "Description": "This is the cavern dive of your dreams! We drive down a bumpy road to reach Cenote Dreamgate, one of the many cenotes connected to the Sac Actun cave system, one of the longest underwater cave systems in the world. There are two (upstream and downstream) dive circuits in this cavern. Every twist and turn unravels the most impressive rock formations. The floor is covered in very fine sediment so you must frog kick and have good buoyancy control to keep from silting up the cavern. ",
+                "Entrance Fee:": "380 pesos",
+                "Overhead": "100% of the dive",
+                "Camera Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "6m/20ft",
+                "Speleothems": "6/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.392783825599,
+                    20.30542083697456
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Dos Ojos",
+                "Description": "Cenote Dos Ojos (Two Eyes) is made up of two cenotes and is part of the Sac Actun cave system. The Barbie Line is a 500m/1,600ft circuit and the first line of Dos Ojos. Both lines start and end in the same cenote - the first eye (East Eye). The Bat Cave line in Cenote Dos Ojos is a bit darker than the Barbie Line but it’s filled with beautiful formations. Towards the beginning of the dive we get to cover our lights to enjoy the natural light of two small cenotes. We slowly glide alongside highly decorated formations until we surface in the Bat Cave, an air-filled dome full of bats with a small opening in the ceiling allowing a beautiful light ray to penetrate through. Keep an eye out for Batman, he might be hiding somewhere in the cave. I heard he goes after divers who touch the formations or those who stay far from the group! Dos Ojos is featured in the following documentaries/movies: IMAX movie “Journey into Amazing Caves” (2001); “The Cave” (2005); BBC series “Planet Earth” (2007).",
+                "Entrance Fee:": "400 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Open Water",
+                "Max Depth": "9m/30ft",
+                "Speleothems": "5/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.39135487684385,
+                    20.325426328141184
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Car Wash",
+                "Description": "Cenote Carwash is also known as Aktun Ha, which means “Cave Water”. This cenote got its name because taxi drivers used to wash their cars using the cenote water. This cenote looks like a typical pond with beautiful lily pads perfect for underwater photography. Algae blooms here in the summer months creating a change in color and reduced visibility in the first couple of meters. After swimming in the open water area for a bit, we’ll make our way toward the cavern section next to the huge fallen tree. Keep an eye out for turtles swimming around in the open water portion. The cavern area is very spacious where we’ll get to enjoy huge formations and pottery.",
+                "Entrance Fee:": "300 pesos",
+                "Camera Fee": "200 pesos",
+                "GoPro Fee": "150 pesos",
+                "Certification Required": "Open Water",
+                "Max Depth": "15m/50ft",
+                "Speleothems": "3/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.48595607710959,
+                    20.274563846038728
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Angelita",
+                "Description": "Angelita (“Little Angel” in English) is a circular open cenote in the middle of the thick jungle. This cenote is one big deep pit, 55m/180ft deep, but we’ll only explore down to 30m. This cenote is popular among freedivers so you’re likely to spot one down at 100ft. We’ll reach the 2m/6ft thick layer of hydrogen sulfide at 30m/100ft. The cloud is made of gas produced by the decomposing tree and other organic materials on the cenote floor. Visibility will be reduced when descending through the thick white cloud so make sure to stay tight with the group. Light doesn’t pass through the cloud so it’ll be dark under there with a yellow tint and it’ll smell like rotten eggs. After having fun in the cloud, we’ll make a spiral ascent and towards the end of our dive, we’ll go through a small swim-through. ",
+                "Entrance Fee:": "350 pesos",
+                "Camera Fee": "350-500 pesos",
+                "GoPro Fee": "150 pesos",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "2/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.57777273911691,
+                    20.13754138310298
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "El Pit",
+                "Description": "El Pit is the deepest (119m/391ft) sinkhole in Quintana Roo and is located in Parque Dos Ojos. The stairs leading down to the cenote are steep and narrow so watch your step! 80% of this massive pit is covered by a ceiling. The dancing light rays you see while descending down this deep pit are absolutely gorgeous. There is a halocline layer at 15m/50ft. At what seems like the bottom of El Pit, you’ll see tree branches protruding out of the thick cloud of hydrogen sulfide, similar to that of Angelita. At around 98 feet towards the back of the massive chamber, you’ll find bones from the Pleistocene era with the label “INAH” (Instituto Nacional de Antropología e Historia). Mayan pottery can also be found in this historic cenote.",
+                "Entrance Fee:": "600 pesos El Pit + Nicte-Ha",
+                "Camera Fee": "300 pesos",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "5/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.41028169029371,
+                    20.324346028422408
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Nicte-Ha",
+                "Description": "Nicte-Ha translates to “Water Flower” and my goodness is this one stunning dive! This is the perfect cenote for photographers because of the nice lighting and beautiful lily pads. Frogkick is required in the cavern because the ceiling gets very low in certain sections and it’s easy to silt up the place.",
+                "Entrance Fee:": "600 pesos El Pit + Nicte-Ha",
+                "Camera Fee": "300 pesos",
+                "GoPro Fee": "None",
+                "Certification Required": "Open Water",
+                "Max Depth": "6.5m/21ft",
+                "Speleothems": "3/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.38011413451996,
+                    20.323357366804988
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Taak Bi Ha",
+                "Description": "This might be my favorite cavern dive due to its difficulty and abundance of fragile formations & fossils - excellent buoyancy control is required. The entrance is very narrow and steep so be careful when walking down the steps. Sections of the cavern are illuminated with artificial lights making this cavern perfect for photography/videography. The speleothems in Taak Bi Ha are just straight up ridiculous, prepare to have your mind blown!",
+                "Entrance Fee:": "300 pesos",
+                "Camera Fee": "300 pesos",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "8m/26ft",
+                "Speleothems": "6/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.3918792749948,
+                    20.32688467402381
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Tak Be Luum",
+                "Description": "Tak Be Luum is home to massive columns, unique bubble/roasted marshmallow-looking formations & a passage called “The Gate of Hell”. This cenote is very dark; so if you’re afraid of the dark, this cenote is not for you. Due to the darkness of this cenote, it is almost guaranteed that you’ll see a blind cavefish (or two). Other fish you’ll see in this cavern are tetras, ciclids, and catfish. Tak Be Luum is a shallow dive and the bottom is full of large dunes of silt. You’ll find a thin layer of hydrogen sulfide cloud on the bottom toward the beginning of the dive making for an eerie scene. The cavern line crosses through sections of open water so we’re always close to the surface.",
+                "Entrance Fee:": "300 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "6.5m/21ft",
+                "Speleothems": "5/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.39960107684794,
+                    20.31397207383145
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Nohoch Nah Chich",
+                "Description": "Nohoch Nah Chich means “giant bird cage” and is located in the longest underwater cave system in the world. Previously only open to certified cave divers & snorkelers, the new cavern line now makes this gorgeous cenote available to recreational divers. The cavern line takes you on a journey alongside beautiful formations, massive columns, huge tree roots, and fish! In some areas, the water doesn’t reach the ceiling so we’re able to pop up to admire the stalactites that continue to grow to this day!",
+                "Entrance Fee:": "400 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "6m/20ft",
+                "Speleothems": "6/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.40404309033988,
+                    20.298677082386984
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Kin-Ha",
+                "Description": "Cenote Kin-Ha is also located on the “Ruta de los Cenotes” and has bell formations like at Zapote. We’ll walk down wooden steps that take us underground to a highly decorated air dome. Holes in the ceiling provide beautiful light beams that penetrate deep underwater. This cylinder shaped cenote has a really cool formation at the bottom and bell formations, unique flowstones and stalactites along the cenote walls. We can also jump into the cenote after the dive through the hole in the ceiling!",
+                "Entrance Fee:": "200 pesos",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "5/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.12797506916456,
+                    20.851313566364578
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Zapote",
+                "Description": "Cenote Zapote is truly one-of-a-kind. Located on the “Ruta de los Cenotes” west of Puerto Morelos, this cenote is named after the zapote trees nearby. This cenote is nicknamed “Hells Bells” because its biothem formations look like bells, which can only be found in a few surrounding cenotes. Biothems are geological formations that are composed of the accumulated remains of living organisms. That’s right, these bell formations are alive and continue to grow ever so slowly. This cenote is shaped like an hourglass with the center located 20m/66ft deep. In the lower chamber, you’ll see the impressive bell formations covering the ceiling. There is a hydrogen sulfide cloud around 30m deep just above the talus cone.",
+                "Entrance Fee:": "350 pesos",
+                "Camera Fee": "350 pesos",
+                "GoPro Fee": "None",
+                "Certification Required": "Advanced",
+                "Max Depth": "30m/100ft",
+                "Speleothems": "6/5",
+                "Halocline": "No"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.125952026315,
+                    20.853674164560815
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "Name": "Kukulkán & Chac Mool",
+                "Description": "The tranquil beauty of Cenote Kukulcan, captured as sunlight filters through the water, casting a spotlight on the submerged trees and rocky formations. Kukulkán is a first class dive due to its beautiful ray of light effects, curtains of lasers and its brightness. Little Brother is ideal for adventurers, it has a very diversified zig zag circuit guide line.",
+                "Entrance Fee:": "600 pesos Kukulkán + Chac Mool",
+                "Camera Fee": "None",
+                "GoPro Fee": "None",
+                "Certification Required": "Open Water",
+                "Max Depth": "14m/45ft",
+                "Speleothems": "3/5",
+                "Halocline": "Yes"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -87.2472569480255,
+                    20.51330640549542
+                ]
+            }
+        }
+
+    ]
+}

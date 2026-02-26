@@ -3,7 +3,7 @@ var map;
 
 // Define custom cave-diving icon
 var caveIcon = L.icon({
-    iconUrl: 'img/cave.png', // Make sure you placed a cave image in the img folder
+    iconUrl: 'img/cave.png', // 
     iconSize: [24, 32],           // icon size
     iconAnchor: [16, 16],         // icon anchor point
     popupAnchor: [0, -15]         // popup offset relative to the icon

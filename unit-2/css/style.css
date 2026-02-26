@@ -6,8 +6,37 @@ html, body {
 }
 
 #map {
-    height: 100%; /* fill the viewport height */
-    width: 100%;  /* full width */
+    height: 100%;
+    width: 80%;
+    display: inline-block;
+}
+
+#panel {
+    width: 16%;
+    padding: 20px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+.range-slider {  
+    width: 55%;  
+}  
+
+.step {  
+    width: 20%;  
+}  
+
+.step img {  
+    width: 100%;  
+}  
+
+#forward {
+    float: right;
+}
+    
+#reverse {  
+    float: left;  
 }
 
 /* Hovering semi-transparent title panel */

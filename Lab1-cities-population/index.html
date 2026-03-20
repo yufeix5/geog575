@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>World City Population 1975–2050</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  />
+</head>
+<body>
+  <!-- Leaflet map mount point -->
+  <div id="map"></div>
+
+  <!-- Timeline, layer toggles, and legends -->
+  <div class="control-panel">
+    <div class="control-header">
+      <h2>World City Populations</h2>
+      <button class="source-info-btn" type="button" aria-label="Data source information">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+        <span class="source-tooltip">Data source: United Nations World Urbanization Prospects.(2025)</span>
+      </button>
+    </div>
+    <div class="control-period">1975-2050</div>
+
+    <div class="control-row">
+      <div class="year-nav">
+        <button id="prevYear" class="year-btn" aria-label="Previous year">&#x2039;</button>
+        <div class="year-badge" id="yearLabel">2025</div>
+        <button id="nextYear" class="year-btn" aria-label="Next year">&#x203A;</button>
+      </div>
+      <input type="range" id="yearSlider" min="1975" max="2050" step="5" value="2025" />
+    </div>
+
+    <div class="control-row toggle-row">
+      <div class="toggle-copy">Show key years (1975, 2000, 2025, 2050)</div>
+      <label class="switch" for="showAllYears" aria-label="Show key years">
+        <input type="checkbox" id="showAllYears" />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="control-row toggle-row">
+      <div class="toggle-copy">Show Top Cities Ranking</div>
+      <label class="switch" for="showRankingPanel" aria-label="Show ranking panel">
+        <input type="checkbox" id="showRankingPanel" />
+        <span class="switch-slider"></span>
+      </label>
+    </div>
+
+    <div class="legend-stack">
+      <div class="legend-card">
+        <div class="legend-title">Temporal Legend</div>
+        <div class="temporal-legend" id="temporalLegend">
+          <span id="temporalItem1975" class="temporal-item"><span class="temporal-dot" style="background:#0c4f76"></span>1975</span>
+          <span id="temporalItem2000" class="temporal-item"><span class="temporal-dot" style="background:#1b78a5"></span>2000</span>
+          <span id="temporalItem2025" class="temporal-item"><span class="temporal-dot" style="background:#57bfe0"></span>2025</span>
+          <span id="temporalItem2050" class="temporal-item"><span class="temporal-dot" style="background:#a7dde9"></span>2050</span>
+        </div>
+        <div id="temporalLegendNote" class="legend-note"></div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-title">Proportional Symbol Legend (in millions)</div>
+        <svg class="size-legend" viewBox="0 0 220 78" aria-label="Population proportional symbol legend">
+          <line x1="18" y1="62" x2="202" y2="62"></line>
+          <circle id="sizeCircle1" cx="48" cy="58" r="4"></circle>
+          <circle id="sizeCircle2" cx="110" cy="54" r="8"></circle>
+          <circle id="sizeCircle3" cx="172" cy="48" r="14"></circle>
+          <text id="sizeLabel1" x="48" y="74">2.0m</text>
+          <text id="sizeLabel2" x="110" y="74">6.0m</text>
+          <text id="sizeLabel3" x="172" y="74">12.0m</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search drawer (desktop + mobile expanded state) -->
+  <div class="map-widget" id="mapWidget">
+    <div class="map-widget-title">Search Place</div>
+    <div class="search-row">
+      <input id="placeSearchInput" class="search-input" type="text" placeholder="Search city or country" />
+      <button id="placeSearchBtn" class="search-btn" type="button">Search</button>
+    </div>
+    <div class="search-status" id="searchStatus"></div>
+  </div>
+
+  <!-- Mobile search trigger -->
+  <button id="mobileSearchFab" class="mobile-search-fab" type="button" aria-label="Toggle search" aria-expanded="false">
+    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+  </button>
+
+  <!-- Ranking overlay/panel -->
+  <div class="ranking-panel" id="rankingPanel">
+    <div class="ranking-header">
+      <div class="map-widget-title">Top Cities Ranking</div>
+      <button id="rankingCloseBtn" class="ranking-close-btn" type="button" aria-label="Close ranking">&times;</button>
+    </div>
+    <div class="ranking-filters">
+      <div class="ranking-field">
+        <label for="rankingYearFilter">Year</label>
+        <select id="rankingYearFilter"></select>
+      </div>
+      <div class="ranking-field">
+        <label for="rankingTopNFilter">Top N</label>
+        <select id="rankingTopNFilter">
+          <option value="5">Top 5</option>
+          <option value="10" selected>Top 10</option>
+          <option value="15">Top 15</option>
+          <option value="20">Top 20</option>
+          <option value="30">Top 30</option>
+        </select>
+      </div>
+    </div>
+    <ul class="ranking-list" id="rankingList"></ul>
+  </div>
+
+  <!-- City detail panel with chart and summary table -->
+  <div class="info-panel" id="infoPanel">
+    <div class="info-header">
+      <h3 id="cityTitle"></h3>
+      <div class="subtitle" id="countryTitle"></div>
+      <button id="infoCloseBtn" class="info-close-btn" aria-label="Close info">&times;</button>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="trendChart" width="480" height="160"></canvas>
+    </div>
+
+    <div class="current-year-pop">Current Year Population (<span id="currentYearLabel">2025</span>): <span id="currentYearPopulationValue">—</span></div>
+
+    <div class="table-wrap">
+      <table class="mini-table">
+        <tbody>
+          <tr>
+            <th>Year</th>
+            <td>1975</td>
+            <td>2000</td>
+            <td>2025</td>
+            <td>2050</td>
+          </tr>
+          <tr>
+            <th>Population</th>
+            <td id="p1975" class="value-cell v1975"></td>
+            <td id="p2000" class="value-cell v2000"></td>
+            <td id="p2025" class="value-cell v2025"></td>
+            <td id="p2050" class="value-cell v2050"></td>
+          </tr>
+          <tr>
+            <th>Global Rank</th>
+            <td id="g1975"></td>
+            <td id="g2000"></td>
+            <td id="g2025"></td>
+            <td id="g2050"></td>
+          </tr>
+          <tr>
+            <th>National Rank</th>
+            <td id="n1975"></td>
+            <td id="n2000"></td>
+            <td id="n2025"></td>
+            <td id="n2050"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- External libs + app entrypoint -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="js/index.js"></script>
+</body>
+</html>

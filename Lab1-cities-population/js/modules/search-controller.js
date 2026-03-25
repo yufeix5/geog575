@@ -9,6 +9,7 @@ export function createSearchController({
   // Inline status helper so calling code stays minimal.
   function setSearchStatus(text, isError = false) {
     searchStatus.textContent = text;
+    // Error color gives quick feedback without interrupting interaction.
     searchStatus.style.color = isError ? "#a53e3e" : "#315266";
   }
 
@@ -23,6 +24,7 @@ export function createSearchController({
     setSearchStatus("Searching...");
 
     try {
+      // Nominatim free-form geocoding endpoint (single best match).
       const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("search request failed");
@@ -45,6 +47,7 @@ export function createSearchController({
 
       const existingSearchMarker = getSearchMarker();
       if (existingSearchMarker) {
+        // Keep only one temporary marker so map does not become cluttered.
         map.removeLayer(existingSearchMarker);
       }
 
@@ -60,6 +63,7 @@ export function createSearchController({
       setSearchMarker(marker);
       setSearchStatus(`Found: ${result.display_name}`);
     } catch (error) {
+      // Network/API errors are non-fatal; user can immediately retry.
       setSearchStatus("Search failed. Try again in a moment.", true);
     }
   }

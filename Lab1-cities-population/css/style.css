@@ -48,6 +48,37 @@
       gap: 10px;
     }
 
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .about-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(39, 105, 134, 0.45);
+      background: rgba(231, 245, 252, 0.92);
+      color: #1e5f7e;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .about-link-btn:hover,
+    .about-link-btn:focus-visible {
+      background: rgba(206, 233, 246, 0.95);
+      border-color: rgba(24, 91, 121, 0.58);
+      color: #0f4e6c;
+    }
+
     .source-info-btn {
       position: relative;
       border: none;
@@ -100,6 +131,31 @@
       margin-top: 3px;
       color: #3c667b;
       font-size: 13px;
+      font-weight: 600;
+    }
+
+    .story-card {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(82, 122, 144, 0.28);
+      background: rgba(241, 249, 253, 0.86);
+    }
+
+    .story-card h3 {
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #1e5269;
+      font-weight: 800;
+    }
+
+    .story-card p {
+      margin: 6px 0 0;
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: #2c5569;
       font-weight: 600;
     }
 
@@ -703,6 +759,15 @@
 
       .control-row {
         margin-top: 10px;
+      }
+
+      .story-card {
+        margin-top: 8px;
+        padding: 8px 9px;
+      }
+
+      .story-card p {
+        font-size: 12px;
       }
 
       .legend-stack {

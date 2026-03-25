@@ -76,13 +76,20 @@ export function initApp() {
   ];
 
   // --- Runtime state ---
+  // Layer group lets us redraw symbols by clearing one container each update.
   const cityLayerGroup = L.layerGroup().addTo(map);
+  // Raw GeoJSON payload loaded once at startup.
   let cityData = null;
+  // Precomputed lookup for faster national-rank access in info panel.
   let nationalRanksByCityCodeYear = new Map();
+  // One-off marker produced by text search.
   let searchMarker = null;
+  // Guards against map background click closing panel right after marker click.
   let suppressNextMapClickClose = false;
+  // Track currently selected marker style in mobile click-to-open mode.
   let mobileSelectedLayer = null;
   let mobileSelectedBaseStyle = null;
+  // Controls mobile search drawer visibility.
   let isMobileSearchOpen = false;
 
   // Leaflet needs explicit size invalidation after mobile layout panel changes.
@@ -93,6 +100,7 @@ export function initApp() {
   }
 
   function isMobileLayout() {
+    // Keep all responsive logic centralized behind one breakpoint check.
     return window.matchMedia("(max-width: 700px)").matches;
   }
 
@@ -108,11 +116,13 @@ export function initApp() {
     if (!isMobileLayout()) return;
 
     if (isInfoOpen) {
+      // Showing info panel should hide other overlays to avoid overlap.
       closeMobileSearch();
       if (rankingPanel) rankingPanel.style.display = "none";
       return;
     }
 
+    // Restore ranking panel state once info panel is closed.
     if (rankingPanel) rankingPanel.style.display = "";
     setRankingPanelVisibility(showRankingPanelCheckbox?.checked ?? false);
   }
@@ -132,6 +142,7 @@ export function initApp() {
   }
 
   const getNationalRankForFeature = (feature, year) => {
+    // Adapter keeps info controller independent from app-level state shape.
     return getNationalRank(nationalRanksByCityCodeYear, feature, year);
   };
 
@@ -213,6 +224,7 @@ export function initApp() {
 
   // Shared marker events for both single-year and overlay render modes.
   function bindInteractions(layer, feature, baseStyle, focusResolver) {
+    // In overlay mode, hover/click focus may target a different "representative" layer.
     let activeFocusLayer = layer;
     let activeFocusStyle = baseStyle;
 
@@ -231,6 +243,7 @@ export function initApp() {
         color: highlightStyle.outline,
         weight: activeFocusStyle.weight + highlightStyle.extraWeight
       });
+      activeFocusLayer.bringToFront();
       updateInfoPanel(feature, event);
     });
 
@@ -258,8 +271,10 @@ export function initApp() {
         color: highlightStyle.outline,
         weight: activeFocusStyle.weight + highlightStyle.extraWeight
       });
+      activeFocusLayer.bringToFront();
 
       if (isMobileLayout()) {
+        // Ensure only one selected marker keeps highlighted style on mobile.
         if (mobileSelectedLayer && mobileSelectedBaseStyle && mobileSelectedLayer !== activeFocusLayer) {
           mobileSelectedLayer.setStyle(mobileSelectedBaseStyle);
         }
@@ -290,9 +305,11 @@ export function initApp() {
       const baseStyle = {
         radius: radiusScale(pop),
         color,
-        weight: 1.6,
+        // Heavier outline + lighter fill improves dense-cluster readability.
+        weight: 2,
+        opacity: 0.95,
         fillColor: color,
-        fillOpacity: 1
+        fillOpacity: 0.24
       };
 
       const circle = L.circleMarker([lat, lon], baseStyle);
@@ -304,7 +321,9 @@ export function initApp() {
   // Render key years together for overlay comparison.
   function renderAllYears() {
     cityLayerGroup.clearLayers();
+    // Draw newer years first/last order to improve visibility in overlap areas.
     const drawOrder = [...keyYears].reverse();
+    // Use latest available year as the interaction anchor for shared info panel updates.
     const latestOrder = [...keyYears].reverse();
 
     cityData.features.forEach(feature => {
@@ -318,9 +337,10 @@ export function initApp() {
         const baseStyle = {
           radius: radiusScale(pop),
           color: colors[year],
-          weight: 1.2,
+          weight: 1.8,
+          opacity: 0.95,
           fillColor: colors[year],
-          fillOpacity: 1
+          fillOpacity: 0.18
         };
 
         const circle = L.circleMarker([lat, lon], baseStyle);
@@ -335,6 +355,7 @@ export function initApp() {
         .find(Boolean) || markerEntries[0];
 
       markerEntries.forEach(entry => {
+        // Every circle is interactive, but focus visuals route to latest representative circle.
         bindInteractions(entry.circle, feature, entry.baseStyle, () => {
           return {
             layer: latestEntry.circle,
@@ -349,6 +370,7 @@ export function initApp() {
   function updateMap() {
     const year = parseInt(yearSlider.value, 10);
     yearLabel.textContent = year;
+    // Keep ranking dropdown synchronized with slider value.
     if (rankingYearFilter) rankingYearFilter.value = String(year);
 
     updateLegends(year, cityData, getPopulation, showAllYearsCheckbox.checked);
@@ -361,13 +383,17 @@ export function initApp() {
     renderSingleYear(year);
   }
 
-  // Step years by slider increment while clamping to min/max.
+  // Step years by slider increment while wrapping at the timeline ends.
   function shiftYear(step) {
     const minYear = parseInt(yearSlider.min, 10);
     const maxYear = parseInt(yearSlider.max, 10);
     const sliderStep = parseInt(yearSlider.step, 10);
     const currentYear = parseInt(yearSlider.value, 10);
-    const nextYear = Math.max(minYear, Math.min(maxYear, currentYear + step * sliderStep));
+    const candidateYear = currentYear + step * sliderStep;
+
+    let nextYear = candidateYear;
+    if (candidateYear > maxYear) nextYear = minYear;
+    if (candidateYear < minYear) nextYear = maxYear;
 
     yearSlider.value = String(nextYear);
     updateMap();
@@ -378,6 +404,7 @@ export function initApp() {
     .then(res => res.json())
     .then(data => {
       cityData = data;
+      // Precompute once to avoid repeated rank sorting on every hover.
       nationalRanksByCityCodeYear = buildNationalRanks(cityData.features, chartYears, getPopulation);
       initRankingYearFilter(rankingYearFilter, chartYears);
       if (rankingYearFilter) rankingYearFilter.value = yearSlider.value;

@@ -25,6 +25,7 @@ export function createRankingController({
     }
 
     if (isMobileLayout() && isVisible) {
+      // Keep overlays mutually exclusive on small screens.
       closeMobileSearch();
     }
 
@@ -38,6 +39,7 @@ export function createRankingController({
     if (!rankingList || !cityData || !Array.isArray(cityData.features)) return;
 
     const topN = parseInt(rankingTopNFilter.value, 10);
+    // De-duplicate possible repeated features by stable city key.
     const bestByCity = new Map();
 
     cityData.features.forEach(feature => {
@@ -46,11 +48,13 @@ export function createRankingController({
 
       const key = getFeatureKey(feature);
       const existing = bestByCity.get(key);
+      // If duplicates exist, retain the highest population record.
       if (!existing || pop > existing.pop) {
         bestByCity.set(key, { feature, pop });
       }
     });
 
+    // Sort descending by population and keep only requested Top-N.
     const ranked = [...bestByCity.values()]
       .sort((a, b) => b.pop - a.pop)
       .slice(0, topN);
@@ -79,7 +83,9 @@ export function createRankingController({
 
       item.addEventListener("click", () => {
         const [lon, lat] = row.feature.geometry.coordinates;
+        // Ensure clicked city is visible even if current zoom is broad.
         map.flyTo([lat, lon], Math.max(map.getZoom(), 6), { duration: 0.8 });
+        // Reuse info panel logic by passing a synthetic pointer location.
         updateInfoPanel(row.feature, {
           originalEvent: {
             clientX: window.innerWidth * 0.62,

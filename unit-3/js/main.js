@@ -17,16 +17,15 @@ window.onload = function () {
     // Title and subtitle are placed directly in SVG for consistent alignment.
     // This keeps map + labels in one visual coordinate system.
     var title = container.append("text")
+        .attr("class", "map-title")
         .attr("x", 20)
         .attr("y", 30)
-        .attr("font-size", "20px")
-        .attr("font-weight", "600")
         .text("NYC Community District Choropleth");
 
     var subtitle = container.append("text")
+        .attr("class", "map-subtitle")
         .attr("x", 20)
         .attr("y", 55)
-        .attr("font-size", "13px")
         .text("Activity 9: TopoJSON + CSV with Promise.all()");
 
     // UI controls container
@@ -34,16 +33,11 @@ window.onload = function () {
     // Using an absolutely positioned div keeps it from affecting SVG layout.
     var controls = d3.select("body")
         .insert("div", ":first-child")
-        .attr("class", "controls")
-        .style("position", "absolute")
-        .style("left", "20px")
-        .style("top", "72px")
-        .style("z-index", "10");
+        .attr("class", "controls");
 
     // Attribute selector for choropleth variable switching.
     var dropdown = controls.append("select")
-        .attr("id", "attribute-select")
-        .style("padding", "6px");
+        .attr("id", "attribute-select");
 
     // Load all required resources concurrently
     // Promise.all waits until:
@@ -129,10 +123,7 @@ window.onload = function () {
             .enter()
             .append("path")
             .attr("class", "district")
-            .attr("d", path)
-            .attr("stroke", "#ffffff")
-            .attr("stroke-width", 0.5)
-            .attr("fill", "#cccccc");
+            .attr("d", path);
 
         // Default thematic variable shown at initial render.
         var currentAttribute = "rent_income_ratio";

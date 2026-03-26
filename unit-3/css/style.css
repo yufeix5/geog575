@@ -1,0 +1,37 @@
+body {
+	margin: 0;
+	font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
+	display: block;
+	margin: 20px auto;
+}
+
+.map-title {
+	font-size: 20px;
+	font-weight: 600;
+	fill: #111827;
+}
+
+.map-subtitle {
+	font-size: 13px;
+	fill: #4b5563;
+}
+
+.controls {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-460px);
+	top: 10%;
+	z-index: 10;
+}
+
+#attribute-select {
+	padding: 6px;
+}
+
+.district {
+	stroke: #ffffff;
+	stroke-width: 0.5;
+}

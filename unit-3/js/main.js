@@ -1,142 +1,203 @@
-//D3 Bubble Chart - Week 8 Activity 8
-//Based on Week 2 simple dataset (Wisconsin cities)
-//This version will be saved as bubblechart.js for Week 9 replacement
+// Activity 9 
 
-window.onload = function(){
-
-    //SVG dimensions
-    var w = 900, h = 500;
-
-    //Create SVG container
+window.onload = function () {
+    // These dimensions define the SVG canvas in pixel units.
+    // The map itself is slightly inset later
+    var width = 960;
+    var height = 640;
+    // Create the root SVG container
+    // All map graphics (title and districts) are appended here.
     var container = d3.select("body")
         .append("svg")
-        .attr("width", w)
-        .attr("height", h)
         .attr("class", "container")
-        .style("background-color", "rgba(0,0,0,0.2)");
-    
-    //Inner rectangle for chart area
-    var innerRect = container.append("rect")
-        .datum(400)
-        .attr("width", function(d){ return d * 2; })
-        .attr("height", function(d){ return d; })
-        .attr("class", "innerRect")
-        .attr("x", 50)
-        .attr("y", 50)
-        .style("fill", "#FFFFFF");
+        .attr("width", width)
+        .attr("height", height);
 
-    //Simple dataset - Wisconsin cities with population data
-    var cityPop = [
-        { 
-            city: 'Madison',
-            population: 233209
-        },
-        {
-            city: 'Milwaukee',
-            population: 594833
-        },
-        {
-            city: 'Green Bay',
-            population: 104057
-        },
-        {
-            city: 'Superior',
-            population: 27244
-        }
-    ];
-
-    //Example 3.3 - scale for circles center x coordinate
-    var x = d3.scaleLinear()
-        .range([90, 750])
-        .domain([0, 3]);
-
-    //Find min and max population values
-    var minPop = d3.min(cityPop, function(d){
-        return d.population;
-    });
-
-    var maxPop = d3.max(cityPop, function(d){
-        return d.population;
-    });
-
-    //Example 3.3 - scale for circles center y coordinate
-    var y = d3.scaleLinear()
-        .range([450, 50])
-        .domain([0, 700000]);
-
-    //Color scale generator
-    var color = d3.scaleLinear()
-        .range(["#FDBE85", "#D94701"])
-        .domain([minPop, maxPop]);
-
-    //Example 3.4 - create circles and bind data
-    var circles = container.selectAll(".circles")
-        .data(cityPop)
-        .enter()
-        .append("circle")
-        .attr("class", "circles")
-        .attr("id", function(d){ return d.city; })
-        .attr("r", function(d){
-            var area = d.population * 0.01;
-            return Math.sqrt(area / Math.PI);
-        })
-        .attr("cx", function(d, i){ return x(i); })
-        .attr("cy", function(d){ return y(d.population); })
-        .style("fill", function(d){ return color(d.population); })
-        .style("stroke", "#000");
-
-    //Example 3.6 - create y axis generator
-    var yAxis = d3.axisLeft(y);
-
-    //Example 3.9 - create axis g element and add axis with translation
-    var axis = container.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(50,0)")
-        .call(yAxis);
-
-    //Example 3.12 - create title
+    // Header text
+    // Title and subtitle are placed directly in SVG for consistent alignment.
+    // This keeps map + labels in one visual coordinate system.
     var title = container.append("text")
-        .attr("class", "title")
-        .attr("text-anchor", "middle")
-        .attr("x", 450)
+        .attr("x", 20)
         .attr("y", 30)
-        .text("City Populations");
-        
-    //Example 3.14 line 1...create circle labels
-    var labels = container.selectAll(".labels")
-        .data(cityPop)
-        .enter()
-        .append("text")
-        .attr("class", "labels")
-        .attr("text-anchor", "left")
-        .attr("y", function(d){
-            //vertical position centered on each circle
-            return y(d.population);
+        .attr("font-size", "20px")
+        .attr("font-weight", "600")
+        .text("NYC Community District Choropleth");
+
+    var subtitle = container.append("text")
+        .attr("x", 20)
+        .attr("y", 55)
+        .attr("font-size", "13px")
+        .text("Activity 9: TopoJSON + CSV with Promise.all()");
+
+    // UI controls container
+    // The dropdown sits in regular HTML, positioned above the map.
+    // Using an absolutely positioned div keeps it from affecting SVG layout.
+    var controls = d3.select("body")
+        .insert("div", ":first-child")
+        .attr("class", "controls")
+        .style("position", "absolute")
+        .style("left", "20px")
+        .style("top", "72px")
+        .style("z-index", "10");
+
+    // Attribute selector for choropleth variable switching.
+    var dropdown = controls.append("select")
+        .attr("id", "attribute-select")
+        .style("padding", "6px");
+
+    // Load all required resources concurrently
+    // Promise.all waits until:
+    // 1. TopoJSON geometry is loaded
+    // 2. CSV attributes are loaded 
+    // 3. topojson-client module is available
+    Promise.all([
+        d3.json("data/cd_final_topo.json"),
+        d3.csv("data/cd_attributes.csv").catch(function () { return []; }),
+        import("https://cdn.jsdelivr.net/npm/topojson-client@3/+esm")
+    ]).then(function (results) {
+        // Keep loaded resources in explicit variables for readability.
+        var topology = results[0];
+        var csvData = results[1];
+        var topojsonClient = results[2];
+
+        // Convert Topology to GeoJSON features
+        var geoData = topojsonClient.feature(topology, topology.objects.cd_final_topo);
+        var features = geoData.features;
+
+        // Fallback keeps the map functional if CSV has not been created yet.
+        // This is useful while developing, but your real submission should still
+        // include and load the CSV for the assignment requirement.
+        // if (!csvData || csvData.length === 0) {
+        //     csvData = features.map(function (f) {
+        //         return {
+        //             BoroCD: f.properties.BoroCD,
+        //             median_rent: f.properties.median_rent,
+        //             median_income: f.properties.median_income,
+        //             annual_rent: f.properties.annual_rent,
+        //             rent_income_ratio: f.properties.rent_income_ratio,
+        //             food_density: f.properties.food_density,
+        //             park_area_ratio: f.properties.park_area_ratio,
+        //             avg_commute_time: f.properties.avg_commute_time,
+        //             Location: f.properties.Location
+        //         };
+        //     });
+        //     console.warn("CSV not found at data/cd_attributes.csv; using TopoJSON properties as fallback.");
+        // }
+
+        // Define projection + path generator
+        // fitSize scales and centers NYC features within the target map frame.
+        var projection = d3.geoMercator()
+            .fitSize([width - 40, height - 90], geoData);
+
+        // Path generator transforms geographic coordinates into SVG path data.
+        var path = d3.geoPath().projection(projection);
+
+        //  Define available choropleth attributes
+        var attributes = [
+            "median_rent",
+            "median_income",
+            "rent_income_ratio",
+            "food_density",
+            "park_area_ratio",
+            "avg_commute_time"
+        ];
+
+        // Populate dropdown options from the attribute list.
+        attributes.forEach(function (attr) {
+            dropdown.append("option")
+                .attr("value", attr)
+                .text(attr);
         });
 
-    //first line of label
-    var nameLine = labels.append("tspan")
-        .attr("class", "nameLine")
-        .attr("x", function(d,i){
-            //horizontal position to the right of each circle
-            return x(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })
-        .text(function(d){
-            return d.city;
+        // Normalize CSV values into numbers
+        // Convert ID + numeric attributes so classification and joins work.
+        csvData.forEach(function (row) {
+            row.BoroCD = +row.BoroCD;
+            attributes.forEach(function (attr) {
+                row[attr] = +row[attr];
+            });
         });
 
-     //create format generator
-     var format = d3.format(",");
-    
-    //second line of label
-    var popLine = labels.append("tspan")
-        .attr("class", "popLine")
-        .attr("x", function(d,i){
-            //horizontal position to the right of each circle
-            return x(i) + Math.sqrt(d.population * 0.01 / Math.PI) + 5;
-        })
-        .attr("dy", "15")   //vertical offset
-        .text(function(d){
-            return "Pop. " + format(d.population);      //use format generator to format numbers
+        // Join CSV attributes into GeoJSON feature properties by BoroCD key.
+        joinData(features, csvData, attributes);
+
+        // Draw district polygons
+        var districts = container.append("g")
+            .attr("transform", "translate(20,70)")
+            .selectAll(".district")
+            .data(features)
+            .enter()
+            .append("path")
+            .attr("class", "district")
+            .attr("d", path)
+            .attr("stroke", "#ffffff")
+            .attr("stroke-width", 0.5)
+            .attr("fill", "#cccccc");
+
+        // Default thematic variable shown at initial render.
+        var currentAttribute = "rent_income_ratio";
+
+        // First choropleth paint.
+        updateChoropleth(districts, currentAttribute, attributes);
+
+        // Sync control state with current map state.
+        dropdown.property("value", currentAttribute);
+
+        // Recompute choropleth whenever user picks a different attribute.
+        dropdown.on("change", function () {
+            currentAttribute = this.value;
+            updateChoropleth(districts, currentAttribute, attributes);
         });
+    }).catch(function (error) {
+        // Catch-all error reporter for network/data/module failures.
+        console.error("Activity 9 data loading error:", error);
+    });
 };
+
+function joinData(features, csvData, attributes) {
+    // Join helper: copy CSV fields into matching geometry features
+    // Build lookup map keyed by BoroCD to avoid nested loops.
+    var dataById = new Map(csvData.map(function (row) { return [row.BoroCD, row]; }));
+
+    // For each geometry feature, attach selected attribute values if found.
+    features.forEach(function (feature) {
+        var key = +feature.properties.BoroCD;
+        var match = dataById.get(key);
+        if (match) {
+            // Copy each thematic numeric column.
+            attributes.forEach(function (attr) {
+                feature.properties[attr] = match[attr];
+            });
+
+            // Also attach a display name if available in CSV.
+            feature.properties.Location = match.Location || feature.properties.Location;
+        }
+    });
+}
+
+function updateChoropleth(selection, expressed, attributes) {
+    // Choropleth helper: classify values and recolor map polygons based on selected attribute
+    // Extract the array of values for the currently expressed attribute.
+    var values = selection.data()
+        .map(function (d) { return +d.properties[expressed]; })
+        .filter(function (v) { return Number.isFinite(v); });
+
+    // Quantile scale creates classes with roughly equal feature counts.
+    var colorScale = d3.scaleQuantile()
+        .domain(values)
+        .range(["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"]);
+
+    selection
+        // Repaint each polygon based on the selected attribute value.
+        .attr("fill", function (d) {
+            var value = +d.properties[expressed];
+            return Number.isFinite(value) ? colorScale(value) : "#dddddd";
+        })
+        // Native SVG tooltip for quick data inspection on hover.
+        // appending each update creates duplicate title nodes over time;
+        .append("title")
+        .text(function (d) {
+            var name = d.properties.Location || ("BoroCD " + d.properties.BoroCD);
+            return name + "\n" + expressed + ": " + d.properties[expressed];
+        });
+}

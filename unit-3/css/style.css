@@ -1,37 +1,74 @@
 body {
 	margin: 0;
 	font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background: #f8fafc;
 }
 
-.container {
+.map,
+.chart {
 	display: block;
-	margin: 20px auto;
+	border: 1px solid #d1d5db;
+	background: #ffffff;
+}
+
+.map {
+	float: left;
+	margin: 56px 0 16px 20px;
+}
+
+.chart {
+	float: right;
+	margin: 56px 20px 16px 0;
 }
 
 .map-title {
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 600;
 	fill: #111827;
 }
 
-.map-subtitle {
-	font-size: 13px;
-	fill: #4b5563;
-}
-
 .controls {
 	position: absolute;
-	left: 50%;
-	transform: translateX(-460px);
-	top: 10%;
+	left: 20px;
+	top: 14px;
 	z-index: 10;
 }
 
-#attribute-select {
+
+.dropdown {
 	padding: 6px;
+	border: 1px solid #cbd5e1;
+	background: #ffffff;
 }
 
 .district {
 	stroke: #ffffff;
 	stroke-width: 0.5;
+}
+
+.bars {
+	stroke: #ffffff;
+	stroke-width: 0.6;
+}
+
+.numbers {
+	fill: #ffffff;
+	font-size: 9px;
+	font-family: sans-serif;
+	pointer-events: none;
+}
+
+.chartTitle {
+	font-family: sans-serif;
+	font-size: 1.1em;
+	font-weight: bold;
+	fill: #111827;
+}
+
+@media (max-width: 1100px) {
+	.map,
+	.chart {
+		float: none;
+		margin: 56px auto 16px auto;
+	}
 }

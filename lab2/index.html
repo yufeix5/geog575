@@ -2,18 +2,22 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>NYC Community District Housing Profile (Data Vintage 2023-2025)</title>
+    <title>Does Affordability Equal Livability? NYC 2023-2025</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <header class="page-header">
-        <h1>NYC Community District Burden Explorer, 2023-2025</h1>
+        <h1>Does Affordability Equal Livability?</h1>
         <p>
-            This interactive map and chart pair shows how rent pressure, commute burden,
-            food access, and park access vary across New York City community districts.
-            The dataset combines processed indicators from 2023-2025 and supports quick
-            comparison, search, and cross-view highlighting.
+            Living in one of the most expensive cities in the world.
+        </p>
+        <p>
+            Use this interactive map and chart to compare NYC community districts across
+            multiple livability dimensions. You can switch indicators, search for a district,
+            and hover to see linked details in both views. This helps you quickly spot patterns,
+            outliers, and trade-offs, and test whether lower-rent neighborhoods are actually
+            more livable when commute time, food access, and park access are considered together.
         </p>
     </header>
 
@@ -28,36 +32,61 @@
         <div class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="btn-overview">
             <h2>What This View Shows</h2>
             <p>
-                This project examines neighborhood-level living burden across NYC community districts
-                using a coordinated choropleth map and ranked bar chart. Users can switch indicators,
-                search by district name, and inspect linked highlights to compare spatial patterns
-                across the city.
+                Research aim: identify relatively livable NYC community districts by comparing
+                economic, mobility, and amenity conditions in one coordinated interface.
+            </p>
+            <p>
+                Working hypothesis: neighborhoods with the lowest rents are not automatically the
+                most livable places, because commute burden, food access, and park access can
+                substantially change total living burden.
+            </p>
+            <p>
+                Indicator meaning in this interface:
+            </p>
+            <ul>
+                <li>Rent-income ratio: higher values indicate stronger housing cost pressure.</li>
+                <li>Median rent and median income: show nominal housing and income conditions.</li>
+                <li>Average commute time: higher values indicate stronger mobility burden.</li>
+                <li>Food density: lower values may indicate weaker neighborhood service access.</li>
+                <li>Park area ratio: lower values may indicate less green-space access.</li>
+            </ul>
+            <p>
+                Interaction design: switch attributes to reexpress both map and chart, and use
+                hover/search to retrieve linked information for the same district across views.
             </p>
         </div>
 
         <div class="tab-panel" id="tab-data-methods" role="tabpanel" aria-labelledby="btn-data-methods" hidden>
             <h2>Data Source and Processing (with Year)</h2>
             <p>
-                Primary data sources: NYC Open Data, Citizens' Committee for Children of New York (CCCNY),
-                U.S. Department of Transportation, and NYC Department of City Planning.
+                This workflow follows the source table and processing diagram used in the TLBI project.
+                Data were compiled from mixed-year releases (primarily 2023-2025) and harmonized to
+                NYC Community District (CD) units.
             </p>
-            <p>
-                Data years: mixed-year official releases, primarily 2023-2025, compiled into one harmonized
-                community-district dataset in 2025.
-            </p>
-            <p>
-                Variables were constructed by NYC Community District:
-            </p>
+            <h3>Source Inventory</h3>
             <ul>
-                <li>Economic burden: rent-income ratio, E = median annual rent / median household income.</li>
-                <li>Park access: park area ratio, A = park area / community district area.</li>
-                <li>Food access: food store density, F = number of food stores / community district area.</li>
-                <li>Mobility burden: population-weighted average commute time, C.</li>
+                <li>Median Rent: CCCNY, Median Asking Rent Monthly, CSV, polygon model at CD level.</li>
+                <li>Median Income: CCCNY, Median Household Incomes, CSV, polygon model at CD level.</li>
+                <li>Commuting Convenience / Mobility Burden: U.S. DOT BTS GeoPlatform, Average Travel Time to Work, GeoJSON, polygon model at Census Tract level.</li>
+                <li>Amenities (Parks): NYC Open Data, Parks Properties, GeoJSON, polygon model.</li>
+                <li>Food Access: data.ny.gov, Retail Food Stores Map, GeoJSON, point model.</li>
+                <li>Boundaries: NYC Department of City Planning, Community District Boundaries, Shapefile, polygon model.</li>
             </ul>
+
+            <h3>Processing Workflow</h3>
             <p>
-                The prepared component
-                indicators (rent, income, rent-income ratio, food density, park area ratio, commute time)
-                are used directly from the processed table and mapped by community district.
+                Variables were derived by joining all datasets to Community District boundaries and then
+                computing standardized indicators:
+            </p>
+            <ol>
+                <li>Economic Burden (E): join median rent and median income (with household filter year 2023 / all-household specification), then compute E = annual rent / income.</li>
+                <li>Park Access (A): intersect park polygons with CD boundaries, dissolve by CD, sum park area, compute CD area, then calculate A = park area / CD area.</li>
+                <li>Food Access (F): spatially join retail food points to CD polygons, count stores by CD, compute CD area, then calculate F = count / CD area.</li>
+                <li>Mobility Burden (C): spatially join census-tract commute data to CDs, then compute population-weighted mean commute time.</li>
+            </ol>
+            <p>
+                Final mapped indicators in this interface are median rent, median income, rent-income ratio,
+                food density, park area ratio, and average commute time.
             </p>
             <p>
                 Table cleaned and processed by Python: <a href="data/cd_attributes.csv">cd_attributes.csv</a> and

@@ -23,7 +23,7 @@
             colors: ["#fff5f0", "#fcbba1", "#fc9272", "#fb6a4a", "#cb181d"]
         },
         food_density: {
-            label: "Food Density (stores/km^2)",
+            label: "Food Density (stores/km²)",
             colors: ["#f7fcf5", "#c7e9c0", "#74c476", "#31a354", "#006d2c"]
         },
         park_area_ratio: {
@@ -111,7 +111,7 @@
         var searchButton = searchWrap.append("button")
             .attr("class", "search-button")
             .attr("type", "button")
-            .text("Search")
+            .text("Locate")
             .on("click", function () {
                 runSearch(searchInput.property("value"), csvData, status);
             });
@@ -176,9 +176,9 @@
             // Join CSV attributes to GeoJSON features
             joinData(geojson, csvData);
 
-            // Projection fitted to map frame
+            // Projection fitted with a small top inset so the map sits slightly lower.
             var projection = d3.geoMercator()
-                .fitSize([mapWidth - 20, mapHeight - 70], {
+                .fitExtent([[10, 20], [mapWidth - 10, mapHeight - 40]], {
                     type: "FeatureCollection",
                     features: geojson
                 });
@@ -281,7 +281,7 @@
         // Store baseline stroke styles so they can be restored after hover
         districts
             .append("desc")
-            .text('{"stroke":"#ffffff","stroke-width":"0.5"}');
+            .text('{"stroke":"#94a3b8","stroke-width":"0.9"}');
 
         // Tooltip per district
         districts.append("title")
@@ -296,7 +296,13 @@
     function setChart(csvData, colorScale, vizWrap, isNarrow, wrapWidth, mapHeight) {
         // Chart frame dimensions
         var chartWidth = isNarrow ? Math.max(320, Math.floor(wrapWidth)) : Math.floor(wrapWidth * 0.36);
-        var chartHeight = mapHeight;
+        var chartHeight = mapHeight - 6;
+        var topPadding = 56;
+        var bottomPadding = 28;
+        var leftPadding = 52;
+        var rightPadding = 6;
+        var plotWidth = chartWidth - leftPadding - rightPadding;
+        var barInset = 1;
 
         // Create chart SVG container
         var chart = vizWrap
@@ -309,8 +315,20 @@
 
         // Scale for bar heights
         var yScale = d3.scaleLinear()
-            .range([0, chartHeight - 60])
+            .range([chartHeight - bottomPadding, topPadding])
             .domain([0, d3.max(csvData, function (d) { return d[expressed]; })]);
+
+        // Left-side axis improves readability when many bars are present.
+        var yAxis = d3.axisLeft(yScale)
+            .ticks(6)
+            .tickFormat(function (d) {
+                return formatAxisTick(expressed, d);
+            });
+
+        chart.append("g")
+            .attr("class", "chart-axis y-axis")
+            .attr("transform", "translate(" + leftPadding + ",0)")
+            .call(yAxis);
 
         // Draw sorted bars
         var bars = chart.selectAll(".bars")
@@ -323,15 +341,15 @@
             .attr("class", function (d) {
                 return "bars boro" + d.BoroCD;
             })
-            .attr("width", chartWidth / csvData.length - 1)
+            .attr("width", plotWidth / csvData.length - 1)
             .attr("x", function (d, i) {
-                return i * (chartWidth / csvData.length);
+                return leftPadding + barInset + i * (plotWidth / csvData.length);
             })
             .attr("height", function (d) {
-                return yScale(d[expressed]);
+                return (chartHeight - bottomPadding) - yScale(d[expressed]);
             })
             .attr("y", function (d) {
-                return chartHeight - yScale(d[expressed]);
+                return yScale(d[expressed]);
             })
             .style("fill", function (d) {
                 return colorScale(d[expressed]);
@@ -355,31 +373,8 @@
         bars.append("title")
             .text(function (d) {
                 var value = Number(d[expressed]);
-                var valueText = Number.isFinite(value) ? value.toFixed(2) : "No data";
+                var valueText = formatValue(expressed, value, false);
                 return d.Location + "\n" + formatAttributeName(expressed) + ": " + valueText;
-            });
-
-        // Value labels on bars
-        chart.selectAll(".numbers")
-            .data(csvData)
-            .enter()
-            .append("text")
-            .sort(function (a, b) {
-                return a[expressed] - b[expressed];
-            })
-            .attr("class", function (d) {
-                return "numbers boro" + d.BoroCD;
-            })
-            .attr("text-anchor", "middle")
-            .attr("x", function (d, i) {
-                var fraction = chartWidth / csvData.length;
-                return i * fraction + (fraction - 1) / 2;
-            })
-            .attr("y", function (d) {
-                return chartHeight - yScale(d[expressed]) + 14;
-            })
-            .text(function (d) {
-                return formatValue(expressed, Number(d[expressed]), true);
             });
 
         // Dynamic chart title
@@ -424,31 +419,24 @@
         // Update bar geometry and color
         updateChart(bars, csvData.length, colorScale);
 
-        // Update labels after sort
-        d3.selectAll(".numbers")
-            .sort(function (a, b) {
-                return a[expressed] - b[expressed];
-            })
-            .transition()
-            .delay(function (d, i) {
-                return i * 5;
-            })
-            .duration(500)
-            .attr("x", function (d, i) {
-                var chartWidth = parseFloat(d3.select(".chart").attr("width"));
-                var fraction = chartWidth / csvData.length;
-                return i * fraction + (fraction - 1) / 2;
-            })
-            .attr("y", function (d) {
-                var chartHeight = parseFloat(d3.select(".chart").attr("height"));
-                var yScale = d3.scaleLinear()
-                    .range([0, chartHeight - 60])
-                    .domain([0, d3.max(csvData, function (row) { return row[expressed]; })]);
-                return chartHeight - yScale(d[expressed]) + 14;
-            })
-            .text(function (d) {
-                return formatValue(expressed, Number(d[expressed]), true);
+        // Update side axis to reflect new attribute scale and units.
+        var chartHeight = parseFloat(d3.select(".chart").attr("height"));
+        var topPadding = 56;
+        var bottomPadding = 28;
+        var yScale = d3.scaleLinear()
+            .range([chartHeight - bottomPadding, topPadding])
+            .domain([0, d3.max(csvData, function (row) { return row[expressed]; })]);
+
+        var yAxis = d3.axisLeft(yScale)
+            .ticks(6)
+            .tickFormat(function (d) {
+                return formatAxisTick(expressed, d);
             });
+
+        d3.select(".y-axis")
+            .transition()
+            .duration(500)
+            .call(yAxis);
 
         // Update bar tooltips + title
         d3.selectAll(".bars title")
@@ -467,10 +455,16 @@
         // Read current chart frame size
         var chartWidth = parseFloat(d3.select(".chart").attr("width"));
         var chartHeight = parseFloat(d3.select(".chart").attr("height"));
+        var topPadding = 56;
+        var bottomPadding = 28;
+        var leftPadding = 52;
+        var rightPadding = 6;
+        var plotWidth = chartWidth - leftPadding - rightPadding;
+        var barInset = 1;
 
         // Scale with current expressed max
         var yScale = d3.scaleLinear()
-            .range([0, chartHeight - 60])
+            .range([chartHeight - bottomPadding, topPadding])
             .domain([0, d3.max(d3.selectAll(".bars").data(), function (d) {
                 return d[expressed];
             })]);
@@ -478,13 +472,14 @@
         // Update bar positions/sizes/colors
         bars
             .attr("x", function (d, i) {
-                return i * (chartWidth / n);
+                return leftPadding + barInset + i * (plotWidth / n);
             })
+            .attr("width", plotWidth / n - 1)
             .attr("height", function (d) {
-                return yScale(d[expressed]);
+                return (chartHeight - bottomPadding) - yScale(d[expressed]);
             })
             .attr("y", function (d) {
-                return chartHeight - yScale(d[expressed]);
+                return yScale(d[expressed]);
             })
             .style("fill", function (d) {
                 return colorScale(d[expressed]);
@@ -528,10 +523,15 @@
         }
 
         if (attr === "food_density") {
-            return compact ? d3.format(".2~f")(value) : d3.format(".2f")(value) + " stores/km^2";
+            return compact ? d3.format(".2~f")(value) : d3.format(".2f")(value) + " stores/km²";
         }
 
         return d3.format(compact ? ".2~f" : ".2f")(value);
+    }
+
+    // Format y-axis ticks with units while keeping labels compact.
+    function formatAxisTick(attr, value) {
+        return formatValue(attr, Number(value), true);
     }
 
     // Fill datalist options with unique sorted community district names
@@ -594,7 +594,6 @@
 
         activeSearchId = match.BoroCD;
         highlight(match);
-        setLabel(match);
         status.text("Found: " + (match.Location || ("BoroCD " + match.BoroCD)));
     }
 

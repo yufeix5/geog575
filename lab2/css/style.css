@@ -155,8 +155,8 @@ body {
 }
 
 .district {
-	stroke: #ffffff;
-	stroke-width: 0.5;
+	stroke: #94a3b8;
+	stroke-width: 0.9;
 }
 
 .bars {
@@ -176,6 +176,18 @@ body {
 	font-size: 1.1em;
 	font-weight: bold;
 	fill: #111827;
+}
+
+.chart-axis path,
+.chart-axis line {
+	stroke: #94a3b8;
+	shape-rendering: crispEdges;
+}
+
+.chart-axis text {
+	fill: #334155;
+	font-size: 11px;
+	font-family: sans-serif;
 }
 
 .infolabel {

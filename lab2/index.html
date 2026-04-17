@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>NYC Community District Housing Profile (Data Vintage 2023-2025)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header class="page-header">
+        <h1>NYC Community District Housing Profile (2023-2025 Data)</h1>
+        <p>
+            This coordinated map and chart support exploratory analysis of housing pressure,
+            commute burden, green-space access, and local food access across New York City
+            community districts. Data were compiled in the 2025 TLBI project pipeline.
+        </p>
+    </header>
+
+    <main id="viz-wrap"></main>
+
+    <section class="info-tabs" aria-label="Project documentation tabs">
+        <div class="tab-buttons" role="tablist" aria-label="Project information tabs">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="tab-overview" id="btn-overview" data-tab-target="tab-overview" type="button">Overview</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-data-methods" id="btn-data-methods" data-tab-target="tab-data-methods" type="button">Data &amp; Methods</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="btn-overview">
+            <h2>Project Context (2023-2025 Snapshot)</h2>
+            <p>
+                This exploratory interface is designed for comparing housing and neighborhood indicators
+                across NYC community districts with coordinated map and chart interactions.
+            </p>
+        </div>
+
+        <div class="tab-panel" id="tab-data-methods" role="tabpanel" aria-labelledby="btn-data-methods" hidden>
+            <h2>Data Source and Processing (with Year)</h2>
+            <p>
+                Primary data sources: NYC Open Data, Citizens' Committee for Children of New York (CCCNY),
+                U.S. Department of Transportation, and NYC Department of City Planning.
+            </p>
+            <p>
+                Data years: mixed-year official releases, primarily 2023-2025, compiled into one harmonized
+                community-district dataset in 2025.
+            </p>
+            <p>
+                Variables were constructed by NYC Community District:
+            </p>
+            <ul>
+                <li>Economic burden: rent-income ratio, E = median annual rent / median household income.</li>
+                <li>Park access: park area ratio, A = park area / community district area.</li>
+                <li>Food access: food store density, F = number of food stores / community district area.</li>
+                <li>Mobility burden: population-weighted average commute time, C.</li>
+            </ul>
+            <p>
+                The prepared component
+                indicators (rent, income, rent-income ratio, food density, park area ratio, commute time)
+                are used directly from the processed table and mapped by community district.
+            </p>
+            <p>
+                Table cleaned and processed by Python: <a href="data/cd_attributes.csv">cd_attributes.csv</a> and
+                <a href="data/cd_final_topo.json">cd_final_topo.json</a>.
+            </p>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
